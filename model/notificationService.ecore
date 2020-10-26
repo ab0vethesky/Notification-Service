@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="notificationService" nsURI="http://www.example.org/notificationService"
+    nsPrefix="notificationService">
+  <eClassifiers xsi:type="ecore:EClass" name="NotificationService">
+    <eOperations name="queueMessage" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="subscriberId" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messageId" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messageClass" eType="#//MessageClass"
+        transient="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="queueId" unique="false"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notificationStatus" eType="#//NotificationStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queueingservice" eType="#//QueueingService"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messagePriority" eType="#//MessagePriority"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="notificationDate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messageRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MessageClass">
+    <eLiterals name="BULK"/>
+    <eLiterals name="SINGLE" value="1"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="QueueingService">
+    <eOperations name="publishMessage"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="message" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateTimeQueued" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateSent" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messagePriority" eType="#//MessagePriority"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messageClass" eType="#//MessageClass"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="publisher" eType="#//Publisher"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="throttlingservice" eType="#//ThrottlingService"
+        eOpposite="#//ThrottlingService/queueingservice"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="ratelimiter" eType="#//RateLimiter"
+        eOpposite="#//RateLimiter/queueingservice"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="prioritizer" eType="#//Prioritizer"
+        eOpposite="#//Prioritizer/queueingservice"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="batchNumber" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EChar"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="messageRate" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ThrottlingService">
+    <eOperations name="scheduleMessage"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queueingservice" eType="#//QueueingService"
+        eOpposite="#//QueueingService/throttlingservice"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="NotificationStatus">
+    <eLiterals name="SENT"/>
+    <eLiterals name="QUEUED" value="1"/>
+    <eLiterals name="FAILED" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="MessagePriority">
+    <eLiterals name="LOW"/>
+    <eLiterals name="MEDIUM" value="1"/>
+    <eLiterals name="HIGH" value="2"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Publisher">
+    <eOperations name="publishMessage"/>
+    <eOperations name="updateStatus"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ID" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        iD="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="dateReceived" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="datePublished" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EDate"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="notificationservice" eType="#//NotificationService"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RateLimiter">
+    <eOperations name="setLimit"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queueingservice" eType="#//QueueingService"
+        eOpposite="#//QueueingService/ratelimiter"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Prioritizer">
+    <eOperations name="updatePriority"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="queueingservice" eType="#//QueueingService"
+        eOpposite="#//QueueingService/prioritizer"/>
+  </eClassifiers>
+</ecore:EPackage>
